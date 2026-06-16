@@ -15,7 +15,7 @@
             scroll-behavior: smooth;
         }
         body {
-            background-color: #110503;
+            background-color: #0b0f12; /* Современный угольно-графитовый фон */
             color: #f5f5f5;
             line-height: 1.6;
             overflow-x: hidden;
@@ -27,9 +27,9 @@
         }
         header {
             text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(180deg, #240b07 0%, #110503 100%);
-            border-bottom: 1px solid #3d1710;
+            padding: 50px 20px 40px 20px;
+            background: linear-gradient(180deg, #131a1f 0%, #0b0f12 100%);
+            border-bottom: 1px solid #1e262c;
         }
         h1 {
             font-size: 28px;
@@ -37,42 +37,50 @@
             letter-spacing: 1px;
             margin-bottom: 10px;
             line-height: 1.2;
+            color: #ffffff;
         }
         .gold {
             color: #d4af37;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+        .mint {
+            color: #00ff87; /* Неоново-зелёный акцент */
+            text-shadow: 0 0 15px rgba(0, 255, 135, 0.3);
         }
         .subtitle {
-            color: #a8a8a8;
+            color: #9aa5b1;
             font-size: 16px;
             margin-bottom: 25px;
         }
         .badge {
-            background-color: #d4af37;
-            color: #110503;
+            background-color: #00ff87; /* Мятный бэдж */
+            color: #0b0f12;
             font-weight: bold;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             display: inline-block;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
         }
         
-        /* Контейнер для главной фотки продукта */
+        /* КОНТЕЙНЕР ДЛЯ ГЛАВНОЙ КАРТИНКИ (АНИМАЦИЯ НА СТАРТЕ) */
         .product-image-container {
-            margin: 20px auto;
+            margin: 30px auto;
             width: 100%;
             max-width: 320px;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
-            border: 1px solid #3d1710;
-            background: #1c0a07;
+            box-shadow: 0 15px 35px rgba(0, 255, 135, 0.1);
+            border: 2px solid #1e262c;
+            background: #131a1f;
+            transform: scale(0.1); /* Начальная точка для JS анимации изнутри наружу */
+            opacity: 0;
         }
         .product-image-container img {
             width: 100%;
             display: block;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
         .product-image-container img:hover {
             transform: scale(1.05);
@@ -80,7 +88,7 @@
 
         .bullets {
             list-style: none;
-            margin: 25px 0;
+            margin: 30px 0;
             text-align: left;
         }
         .bullets li {
@@ -88,45 +96,48 @@
             font-size: 16px;
             display: flex;
             align-items: center;
-            background: rgba(36, 11, 7, 0.4);
-            padding: 10px 15px;
-            border-radius: 8px;
-            border-left: 3px solid #d4af37;
+            background: rgba(19, 26, 31, 0.6);
+            padding: 12px 18px;
+            border-radius: 12px;
+            border-left: 4px solid #00ff87; /* Зелёная полоса */
+            border-right: 1px solid #1e262c;
+            border-top: 1px solid #1e262c;
+            border-bottom: 1px solid #1e262c;
         }
         .bullets li::before {
-            content: "🔥";
+            content: "✨";
             margin-right: 12px;
             font-size: 18px;
         }
         
-        /* Пульсирующая кнопка заказа */
+        /* Пульсирующая кнопка заказа в новом стиле */
         .btn {
             display: block;
             width: 100%;
-            background: linear-gradient(180deg, #ff4e00 0%, #d60000 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #00ff87 0%, #60efff 100%); /* Градиент в цвет темы */
+            color: #0b0f12;
             text-align: center;
             padding: 18px;
             font-size: 18px;
             font-weight: bold;
             text-decoration: none;
             border-radius: 50px;
-            box-shadow: 0 4px 20px rgba(255, 78, 0, 0.4);
+            box-shadow: 0 5px 25px rgba(0, 255, 135, 0.3);
             border: none;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            animation: pulse 2s infinite;
+            animation: pulse 2.5s infinite;
         }
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 4px 20px rgba(255, 78, 0, 0.4); }
-            50% { transform: scale(1.02); box-shadow: 0 4px 25px rgba(255, 78, 0, 0.7); }
-            100% { transform: scale(1); box-shadow: 0 4px 20px rgba(255, 78, 0, 0.4); }
+            0% { transform: scale(1); box-shadow: 0 5px 25px rgba(0, 255, 135, 0.3); }
+            50% { transform: scale(1.03); box-shadow: 0 5px 30px rgba(0, 255, 135, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 5px 25px rgba(0, 255, 135, 0.3); }
         }
 
         section {
-            padding: 40px 0;
-            border-bottom: 1px solid #240b07;
+            padding: 45px 0;
+            border-bottom: 1px solid #131a1f;
         }
         h2 {
             font-size: 22px;
@@ -141,13 +152,13 @@
             gap: 15px;
         }
         .card {
-            background: #1c0a07;
-            border: 1px solid #3d1710;
+            background: #131a1f;
+            border: 1px solid #1e262c;
             padding: 20px 15px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 14px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
         }
         .card-icon {
             font-size: 28px;
@@ -163,40 +174,43 @@
             margin-top: 20px;
         }
         .ing-card {
-            background: #240b07;
-            border-radius: 10px;
+            background: #131a1f;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #421f19;
+            border: 1px solid #1e262c;
             text-align: center;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
         }
         .ing-card img {
             width: 100%;
-            height: 100px;
+            height: 110px;
             object-fit: cover;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         .ing-card span {
             font-size: 13px;
             font-weight: bold;
-            color: #e0e0e0;
+            color: #cbd5e1;
         }
 
         .info-box {
-            background: #240b07;
-            border-left: 4px solid #d4af37;
-            padding: 15px;
-            border-radius: 0 10px 10px 0;
+            background: #131a1f;
+            border-left: 4px solid #00ff87;
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
             margin-bottom: 15px;
             font-size: 14px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-top: 1px solid #1e262c;
+            border-right: 1px solid #1e262c;
+            border-bottom: 1px solid #1e262c;
         }
         form input {
             width: 100%;
             padding: 16px;
-            background: #1c0a07;
-            border: 1px solid #3d1710;
-            border-radius: 10px;
+            background: #131a1f;
+            border: 1px solid #1e262c;
+            border-radius: 12px;
             color: #fff;
             font-size: 16px;
             margin-bottom: 15px;
@@ -204,14 +218,14 @@
         }
         form input:focus {
             outline: none;
-            border-color: #d4af37;
+            border-color: #00ff87;
         }
         footer {
             text-align: center;
             font-size: 12px;
-            color: #575757;
-            padding: 30px 0;
-            background: #090302;
+            color: #486581;
+            padding: 35px 0;
+            background: #070a0d;
         }
     </style>
 </head>
@@ -223,14 +237,16 @@
             <h1 class="reveal-top">Капсулы для похудения <br><span class="gold">Al Sheikh</span></h1>
             <p class="subtitle reveal-top">Сжигание жира и контроль аппетита без жестких диет</p>
             
-            <!-- ГЛАВНОЕ ФОТО ПРОДУКТА (ВЫЛЕТАЕТ СЛЕВА) -->
-            <div class="product-image-container reveal-left">
+            <!-- ГЛАВНАЯ КАРТИНКА ПРОДУКТА (ЛЕТИТ ИЗ ДАЛЕКА В ЦЕНТР) -->
+            <div class="product-image-container id-main-image">
+                <!-- ========================================== -->
+                <!-- 🔽 ЗАМЕНИ ТУТ ССЫЛКУ НА СВОЮ ГЛАВНУЮ ФОТКУ -->
                 <img src="https://images.unsplash.com/photo-1611073166144-6a903be508b9?auto=format&fit=crop&q=80&w=600" alt="Al Sheikh Capsules">
+                <!-- ========================================== -->
             </div>
 
-            <!-- БУЛЛИТЫ (ВЫЛЕТАЕТ СПРАВА) -->
             <ul class="bullets reveal-right">
-                <li>Интенсивно сжигают жировые отложения (-10 кг)</li>
+                <li>Интенсивно сжигают жировые отложения (<span class="mint">-10 кг</span>)</li>
                 <li>Эффективно выводят шлаки и токсины</li>
                 <li>Снижают аппетит и убирают чувство голода</li>
             </ul>
@@ -242,7 +258,6 @@
     <section>
         <div class="container">
             <h2 class="reveal-top">Свойства препарата</h2>
-            <!-- КАРТОЧКИ СВОЙСТВ (ВСПЛЫВАЮТ СНИЗУ ПО ОЧЕРЕДИ) -->
             <div class="grid">
                 <div class="card reveal-card">
                     <span class="card-icon">🚫</span>
@@ -267,24 +282,37 @@
     <section>
         <div class="container">
             <h2 class="reveal-top">Натуральный состав</h2>
-            <!-- КАРТОЧКИ СОСТАВА С РЕАЛЬНЫМИ КАРТИНКАМИ -->
+            
             <div class="ingredients-grid">
+                
+                <!-- КАРТИНКА СОСТАВА 1 -->
                 <div class="ing-card reveal-card">
+                    <!-- 🔽 ЗАМЕНИ ТУТ ССЫЛКУ (Черный тмин) -->
                     <img src="https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80&w=300" alt="Черный тмин">
                     <span>Черный тмин</span>
                 </div>
+                
+                <!-- КАРТИНКА СОСТАВА 2 -->
                 <div class="ing-card reveal-card">
+                    <!-- 🔽 ЗАМЕНИ ТУТ ССЫЛКУ (Зеленый кофе) -->
                     <img src="https://images.unsplash.com/photo-1512211878902-623f265f9505?auto=format&fit=crop&q=80&w=300" alt="Зеленый кофе">
                     <span>Зеленый кофе</span>
                 </div>
+                
+                <!-- КАРТИНКА СОСТАВА 3 -->
                 <div class="ing-card reveal-card">
+                    <!-- 🔽 ЗАМЕНИ ТУТ ССЫЛКУ (Черный чай) -->
                     <img src="https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&q=80&w=300" alt="Черный чай">
                     <span>Черный чай</span>
                 </div>
+                
+                <!-- КАРТИНКА СОСТАВА 4 -->
                 <div class="ing-card reveal-card">
+                    <!-- 🔽 ЗАМЕНИ ТУТ ССЫЛКУ (Кактус) -->
                     <img src="https://images.unsplash.com/photo-1565123405389-9a6ca0e80e14?auto=format&fit=crop&q=80&w=300" alt="Кактус">
                     <span>Экстракт кактуса</span>
                 </div>
+                
             </div>
         </div>
     </section>
@@ -295,10 +323,10 @@
             <div class="info-box reveal-left">
                 <strong>Режим приема:</strong> По 1 капсуле 2 раза в день. Первая — утром натощак за 30 минут до завтрака. Вторая — в 15:00.
             </div>
-            <div class="info-box reveal-left" style="animation-delay: 0.2s;">
+            <div class="info-box reveal-left">
                 <strong>Важно:</strong> Пейте много чистой воды в течение дня. Исключите кофе и крепкий чай.
             </div>
-            <div class="info-box reveal-left" style="border-left-color: #d60000; animation-delay: 0.4s;">
+            <div class="info-box reveal-left" style="border-left-color: #ff4e00;">
                 <strong>Ограничения:</strong> Строго от 18 до 65 лет.
             </div>
         </div>
@@ -306,9 +334,9 @@
 
     <section id="order">
         <div class="container">
-            <h2 class="reveal-top">Оформить заказ</h2>
-            <p style="text-align:center; margin-bottom: 20px; color: #d4af37;" class="reveal-top">Успейте получить консультацию и скидку 50%!</p>
-            <form onsubmit="alert('Заявка успешно принята! Менеджер свяжется с вами.'); return false;" class="reveal-bottom">
+            <h2>Оформить заказ</h2>
+            <p style="text-align:center; margin-bottom: 20px; color: #00ff87;">Успейте получить консультацию и скидку 50%!</p>
+            <form onsubmit="alert('Заявка успешно принята! Менеджер свяжется с вами.'); return false;">
                 <input type="text" placeholder="Введите ваше имя" required>
                 <input type="tel" placeholder="Введите ваш телефон" required>
                 <button type="submit" class="btn">Получить скидку</button>
@@ -323,26 +351,33 @@
         </div>
     </footer>
 
-    <!-- НАСТРОЙКА КРУТЫХ JS АНИМАЦИЙ ВЫЛЕТА -->
     <script>
-        // Инициализируем ScrollReveal с базовыми настройками
+        // Анимация прилета картинки ИЗ ДАЛЕКА В ЦЕНТР при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            const mainImg = document.querySelector('.id-main-image');
+            setTimeout(() => {
+                mainImg.style.transition = 'transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1s ease';
+                mainImg.style.transform = 'scale(1)';
+                mainImg.style.opacity = '1';
+            }, 200); // Небольшая задержка, чтобы анимация была плавной
+        });
+
+        // Инициализация ScrollReveal для остальных блоков
         const sr = ScrollReveal({
             duration: 1000,
             reset: false,
             mobile: true
         });
 
-        // Настраиваем разные типы вылетов
-        sr.reveal('.reveal-top', { origin: 'top', distance: '50px' });
-        sr.reveal('.reveal-bottom', { origin: 'bottom', distance: '50px' });
-        sr.reveal('.reveal-left', { origin: 'left', distance: '80px' });
-        sr.reveal('.reveal-right', { origin: 'right', distance: '80px' });
+        sr.reveal('.reveal-top', { origin: 'top', distance: '40px' });
+        sr.reveal('.reveal-bottom', { origin: 'bottom', distance: '40px' });
+        sr.reveal('.reveal-left', { origin: 'left', distance: '60px' });
+        sr.reveal('.reveal-right', { origin: 'right', distance: '60px' });
         
-        // Карточки вылетают по очереди (эффект каскада)
         sr.reveal('.reveal-card', { 
             origin: 'bottom', 
             distance: '30px',
-            interval: 150 
+            interval: 120 
         });
     </script>
 </body>
