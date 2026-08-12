@@ -2,288 +2,166 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snow Survival 3D - Multiplayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24PORTFOLIO // Web Dev & Video Editing</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #050510; user-select: none; touch-action: none; }
-        canvas { display: block; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
-        #hud {
-            position: absolute; top: 15px; left: 15px;
-            font-family: 'Courier New', sans-serif; color: #fff;
-            background: rgba(10, 15, 30, 0.8); padding: 15px; 
-            border-radius: 8px; border: 1px solid #4a6984; z-index: 10;
-        }
-        .bar-container { width: 150px; background: #222; border-radius: 4px; margin: 5px 0; height: 12px; overflow: hidden;}
-        .bar { height: 100%; width: 100%; transition: width 0.2s; }
-        #warmth-bar { background: #ffa502; }
-        #health-bar { background: #ff4757; }
-        #fire-bar { background: #ffffff; }
-        #inventory { margin-top: 8px; color: #a8ffb2; font-weight: bold; }
-        
-        #home-marker {
-            position: absolute; font-family: 'Courier New', sans-serif; font-size: 14px; font-weight: bold;
-            color: #8ab4f8; background: rgba(10, 15, 30, 0.85); padding: 6px 10px; border-radius: 20px;
-            border: 1px solid #8ab4f8; pointer-events: none; transform: translate(-50%, -50%); display: none; z-index: 5;
-            white-space: nowrap; box-shadow: 0 0 10px rgba(138, 180, 248, 0.5);
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #080808;
+            color: #f3f4f6;
         }
 
-        #game-over {
-            display: none; position: absolute; width: 100%; height: 100%;
-            background: rgba(20, 0, 0, 0.9); color: #ff4757; z-index: 30;
-            flex-direction: column; align-items: center; justify-content: center;
-            font-family: sans-serif; font-size: 32px; font-weight: bold;
+        .red-glow {
+            box-shadow: 0 0 50px -10px rgba(239, 68, 68, 0.3);
         }
 
-        #instructions {
-            position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.7); color: #fff;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-family: sans-serif; font-size: 18px; z-index: 20; cursor: pointer; text-align: center;
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        #joystick-zone {
-            position: absolute; bottom: 40px; left: 40px; width: 110px; height: 110px;
-            background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(138, 180, 248, 0.3);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;
-        }
-        #joystick-stick { width: 45px; height: 45px; background: rgba(255, 255, 255, 0.4); border-radius: 50%; }
-        #crosshair { position: absolute; top: 50%; left: 50%; width: 6px; height: 6px; background: rgba(255,255,255,0.6); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 4; }
         
-        #connection-status { position: absolute; top: 15px; right: 15px; font-family: monospace; color: #ff4757; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 4px; z-index: 10; font-size: 12px; }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.2);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body>
+<body class="selection:bg-red-500 selection:text-white overflow-x-hidden">
 
-    <div id="game-over">
-        <div>ВЫ ЗАМЕРЗЛИ НАСМЕРТЬ</div>
-        <div style="font-size: 16px; color: #aaa; margin-top: 10px;">Обновите страницу, чтобы переподключиться</div>
-    </div>
+    <!-- Background Ambient Glows -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-600/15 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed bottom-0 right-0 w-[400px] h-[400px] bg-red-900/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
 
-    <div id="instructions">
-        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">КЛИКНИ ДЛЯ ВХОДА В СЕТЕВУЮ ИГРУ</div>
-        <div style="font-size: 14px; color: #aaa;">Выживай вместе с другими игроками в реальном времени!</div>
-    </div>
+    <!-- Navigation -->
+    <nav class="max-w-6xl mx-auto px-6 py-6 flex justify-between items-center border-b border-white/5">
+        <div class="text-xl font-extrabold tracking-widest text-white flex items-center gap-2">
+            <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+            24PORTFOLIO<span class="text-red-500">.RU</span>
+        </div>
+        <a href="#contact" class="px-5 py-2.5 rounded-full bg-red-600/10 border border-red-500/30 text-red-400 font-medium text-sm hover:bg-red-600 hover:text-white transition duration-300">
+            Связаться
+        </a>
+    </nav>
 
-    <div id="connection-status">ПОДКЛЮЧЕНИЕ СЕТИ...</div>
-
-    <div id="hud">
-        <div style="font-weight: bold; margin-bottom: 5px; color: #8ab4f8;">ТАЙГА ОНЛАЙН</div>
-        <div>Тепло:</div> <div class="bar-container"><div id="warmth-bar" class="bar"></div></div>
-        <div>Здоровье:</div> <div class="bar-container"><div id="health-bar" class="bar"></div></div>
-        <div>Костёр:</div> <div class="bar-container"><div id="fire-bar" class="bar"></div></div>
-        <div id="inventory">Дрова в руках: 0</div>
-    </div>
-
-    <div id="home-marker">🏠 ДОМ [0м]</div>
-    <div id="crosshair"></div>
-    <div id="joystick-zone"><div id="joystick-stick"></div></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-
-    <script>
-        // === НАСТРОЙКА СЕТИ ===
-        // НА ШАГЕ 5 МЫ ЗАМЕНИМ ЭТОТ URL НА ССЫЛКУ ОТ RENDER
-        const SERVER_URL = "https://24portfolio.ru";
-        const socket = io(SERVER_URL);
+    <!-- Hero Section -->
+    <section class="max-w-6xl mx-auto px-6 pt-16 pb-20 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
         
-        const otherPlayers = {}; 
+        <!-- Text Info -->
+        <div class="md:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold uppercase tracking-wider">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i> Vibe Coding & Creative Vision
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight tracking-tight">
+                Создаю <span class="text-gradient">сайты</span> & погружаюсь в <span class="text-red-500">монтаж</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg leading-relaxed max-w-xl">
+                Разрабатываю стильные веб-проекты с акцентом на современный дизайн и высокую скорость. Параллельно осваиваю искусство видеомонтажа и динамичного каттинга.
+            </p>
 
-        socket.on('connect', () => {
-            document.getElementById('connection-status').innerText = "СЕТЬ: ОК";
-            document.getElementById('connection-status').style.color = "#a8ffb2";
-        });
+            <div class="pt-4 flex flex-wrap gap-4">
+                <a href="#skills" class="px-7 py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition red-glow flex items-center gap-2">
+                    Что я умею <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+                </a>
+                <a href="https://t.me/" target="_blank" class="px-7 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold transition flex items-center gap-2">
+                    Telegram <i data-lucide="send" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
 
-        socket.on('disconnect', () => {
-            document.getElementById('connection-status').innerText = "СЕТЬ: ОТКЛЮЧЕНО";
-            document.getElementById('connection-status').style.color = "#ff4757";
-        });
+        <!-- Photo Frame -->
+        <div class="md:col-span-5 flex justify-center">
+            <div class="relative group">
+                <!-- Red Glow Aura -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-red-600 to-red-900 rounded-3xl blur-xl opacity-50 group-hover:opacity-80 transition duration-500"></div>
+                
+                <!-- Avatar Container -->
+                <div class="relative w-72 h-80 sm:w-80 sm:h-96 rounded-2xl overflow-hidden border border-white/10 bg-neutral-900">
+                    <!-- ЗАМЕНИ 'your-photo.jpg' НА СВОЕ ФОТО -->
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" 
+                         alt="Мое фото" 
+                         class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
+                    
+                    <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                        <p class="text-white font-bold text-lg">Твоё Имя</p>
+                        <p class="text-xs text-red-400">Web Developer / Video Creator</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x05050b);
-        scene.fog = new THREE.FogExp2(0x05050b, 0.03);
+    <!-- Skills / Direction Section -->
+    <section id="skills" class="max-w-6xl mx-auto px-6 py-16 border-t border-white/5">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-10 flex items-center gap-3">
+            <span class="w-3 h-3 bg-red-500 rounded-sm"></span> Мои Направления
+        </h2>
 
-        const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 500);
-        const player = new THREE.Object3D();
-        player.position.set(0, 0, 5); 
-        scene.add(player);
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Card 1: Web Dev -->
+            <div class="p-8 rounded-2xl bg-neutral-900/60 border border-white/5 card-hover relative overflow-hidden">
+                <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-6">
+                    <i data-lucide="code-2" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Веб-Разработка</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Верстка адаптивных landing page, сайтов-визиток и веб-интерфейсов. Делаю чистый код, работающий на Vercel без задержек.
+                </p>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="px-3 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">HTML/CSS</span>
+                    <span class="px-3 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">Tailwind</span>
+                    <span class="px-3 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">JavaScript</span>
+                    <span class="px-3 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">Vercel</span>
+                </div>
+            </div>
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+            <!-- Card 2: Video Editing -->
+            <div class="p-8 rounded-2xl bg-neutral-900/60 border border-white/5 card-hover relative overflow-hidden">
+                <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-6">
+                    <i data-lucide="video" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Видеомонтаж (In Progress)</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Активно обучаюсь профессиональному монтажу: динамические склейки, работа со звуком, саунд-дизайн и создание короткого контента (Reels/Shorts).
+                </p>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="px-3 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">Premiere Pro / CapCut</span>
+                    <span class="px-3 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">Sound Design</span>
+                    <span class="px-3 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">Shorts & Reels</span>
+                </div>
+            </div>
 
-        const ambientLight = new THREE.AmbientLight(0x203050, 0.6); scene.add(ambientLight);
-        const fireLight = new THREE.PointLight(0xff6a00, 2, 15); fireLight.position.set(0, 0.6, 0); scene.add(fireLight);
+        </div>
+    </section>
 
-        const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0xdef0ff, roughness: 0.9 }));
-        ground.rotation.x = -Math.PI / 2; scene.add(ground);
+    <!-- Footer / Contact -->
+    <footer id="contact" class="max-w-6xl mx-auto px-6 py-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6">
+        <div class="text-sm text-gray-500">
+            © 2026 <span class="text-gray-300">24portfolio.ru</span>. All rights reserved.
+        </div>
+        <div class="flex items-center gap-6 text-gray-400">
+            <a href="https://t.me/" target="_blank" class="hover:text-red-500 transition"><i data-lucide="send" class="w-5 h-5"></i></a>
+            <a href="https://github.com/" target="_blank" class="hover:text-red-500 transition"><i data-lucide="github" class="w-5 h-5"></i></a>
+        </div>
+    </footer>
 
-        const cabin = new THREE.Group();
-        const logMat = new THREE.MeshStandardMaterial({ color: 0x2e1d11 });
-        const wallBack = new THREE.Mesh(new THREE.BoxGeometry(6, 3, 0.4), logMat); wallBack.position.set(0, 1.5, -3); cabin.add(wallBack);
-        const wallLeft = new THREE.Mesh(new THREE.BoxGeometry(0.4, 3, 6), logMat); wallLeft.position.set(-3, 1.5, 0); cabin.add(wallLeft);
-        const wallRight = new THREE.Mesh(new THREE.BoxGeometry(0.4, 3, 6), logMat); wallRight.position.set(3, 1.5, 0); cabin.add(wallRight);
-        const roof = new THREE.Mesh(new THREE.CylinderGeometry(0, 4.3, 3, 4), new THREE.MeshStandardMaterial({ color: 0x1c120a })); 
-        roof.position.set(0, 4.2, 0); roof.scale.set(1, 1, 1.4); roof.rotateY(Math.PI / 4); cabin.add(roof);
-        scene.add(cabin);
-
-        const campFireGroup = new THREE.Group();
-        const fireMesh = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.2, 0.6), new THREE.MeshBasicMaterial({ color: 0xff3700 }));
-        fireMesh.position.y = 0.1; campFireGroup.add(fireMesh);
-        scene.add(campFireGroup);
-
-        const homeTargetPos = new THREE.Vector3(0, 3.5, 0);
-
-        // Функция создания 3D модельки чужого игрока
-        function createPlayerMesh(data) {
-            const group = new THREE.Group();
-            const bodyGeo = new THREE.CylinderGeometry(0.3, 0.3, 1.4, 8);
-            const bodyMat = new THREE.MeshStandardMaterial({ color: data.color, roughness: 0.7 });
-            const body = new THREE.Mesh(bodyGeo, bodyMat);
-            body.position.y = 0.7;
-            group.add(body);
-
-            const headGeo = new THREE.SphereGeometry(0.25, 8, 8);
-            const headMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
-            const head = new THREE.Mesh(headGeo, headMat);
-            head.position.y = 1.5;
-            group.add(head);
-
-            group.position.set(data.x, 0, data.z);
-            scene.add(group);
-            return group;
-        }
-
-        // === СЕТЕВЫЕ СОБЫТИЯ ===
-        socket.on('currentPlayers', (players) => {
-            Object.keys(players).forEach((id) => {
-                if (id !== socket.id) {
-                    otherPlayers[id] = createPlayerMesh(players[id]);
-                }
-            });
-        });
-
-        socket.on('newPlayer', (playerInfo) => {
-            otherPlayers[playerInfo.id] = createPlayerMesh(playerInfo);
-        });
-
-        socket.on('playerMoved', (playerInfo) => {
-            if (otherPlayers[playerInfo.id]) {
-                otherPlayers[playerInfo.id].position.set(playerInfo.x, 0, playerInfo.z);
-                otherPlayers[playerInfo.id].rotation.y = playerInfo.rotationY;
-            }
-        });
-
-        socket.on('playerDisconnected', (id) => {
-            if (otherPlayers[id]) {
-                scene.remove(otherPlayers[id]);
-                delete otherPlayers[id];
-            }
-        });
-
-        // Дрова
-        const woodItems = [];
-        const woodGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.9, 5); woodGeo.rotateZ(Math.PI / 2);
-        const woodMat = new THREE.MeshStandardMaterial({ color: 0x2e1d11 });
-        for(let i = 0; i < 30; i++) {
-            const wood = new THREE.Mesh(woodGeo, woodMat);
-            wood.position.set((Math.random()-0.5)*150, 0.12, (Math.random()-0.5)*150);
-            scene.add(wood); woodItems.push(wood);
-        }
-
-        const controls = new THREE.PointerLockControls(camera, document.body);
-        controls.getObject().position.y = 1.6; scene.add(controls.getObject());
-        const instructions = document.getElementById('instructions');
-        instructions.addEventListener('click', () => { controls.lock(); });
-        controls.addEventListener('lock', () => { instructions.style.display = 'none'; });
-        controls.addEventListener('unlock', () => { if(stats.health > 0) instructions.style.display = 'flex'; });
-
-        const keys = { w: false, a: false, s: false, d: false };
-        window.addEventListener('keydown', (e) => {
-            if(e.code==='KeyW') keys.w = true; if(e.code==='KeyS') keys.s = true;
-            if(e.code==='KeyA') keys.a = true; if(e.code==='KeyD') keys.d = true;
-        });
-        window.addEventListener('keyup', (e) => {
-            if(e.code==='KeyW') keys.w = false; if(e.code==='KeyS') keys.s = false;
-            if(e.code==='KeyA') keys.a = false; if(e.code==='KeyD') keys.d = false;
-        });
-
-        let stats = { warmth: 100, health: 100, wood: 0, campfireTime: 120 };
-        let lastPosition = { x: 0, z: 5, rotationY: 0 };
-
-        function animate() {
-            if (stats.health <= 0) return;
-            requestAnimationFrame(animate);
-
-            let moveDir = new THREE.Vector3();
-            if (controls.isLocked) {
-                if (keys.w) moveDir.z = -1; if (keys.s) moveDir.z = 1; if (keys.a) moveDir.x = -1; if (keys.d) moveDir.x = 1;
-                moveDir.normalize(); controls.moveRight(moveDir.x * 0.12); controls.moveForward(-moveDir.z * 0.12);
-                player.position.x = controls.getObject().position.x; player.position.z = controls.getObject().position.z;
-
-                const currentRotY = controls.getObject().rotation.y;
-                if (player.position.x !== lastPosition.x || player.position.z !== lastPosition.z || currentRotY !== lastPosition.rotationY) {
-                    socket.emit('playerMovement', {
-                        x: player.position.x,
-                        z: player.position.z,
-                        rotationY: currentRotY
-                    });
-                    lastPosition.x = player.position.x;
-                    lastPosition.z = player.position.z;
-                    lastPosition.rotationY = currentRotY;
-                }
-            }
-
-            if (stats.campfireTime > 0) {
-                stats.campfireTime = Math.max(0, stats.campfireTime - 0.0166);
-                fireMesh.visible = true; fireLight.visible = true;
-            } else {
-                fireMesh.visible = false; fireLight.visible = false;
-            }
-
-            const distToCampfire = Math.sqrt(player.position.x * player.position.x + player.position.z * player.position.z);
-            if (distToCampfire < 2.5 && stats.campfireTime > 0) {
-                stats.warmth = Math.min(100, stats.warmth + 0.4); stats.health = Math.min(100, stats.health + 0.1);
-            } else {
-                stats.warmth = Math.max(0, stats.warmth - 0.025); 
-            }
-
-            if (distToCampfire < 2.5 && stats.wood > 0) {
-                stats.campfireTime = Math.min(300, stats.campfireTime + (stats.wood * 60));
-                stats.wood = 0; document.getElementById('inventory').innerText = `Дрова в руках: ${stats.wood}`;
-            }
-
-            if (stats.warmth <= 0) {
-                stats.health = Math.max(0, stats.health - 0.15);
-                if (stats.health <= 0) { document.getElementById('game-over').style.display = 'flex'; controls.unlock(); }
-            }
-
-            for (let i = woodItems.length - 1; i >= 0; i--) {
-                const item = woodItems[i];
-                const dist2D = Math.sqrt(Math.pow(player.position.x - item.position.x, 2) + Math.pow(player.position.z - item.position.z, 2));
-                if (dist2D < 2.2) { scene.remove(item); woodItems.splice(i, 1); stats.wood++; document.getElementById('inventory').innerText = `Дрова в руках: ${stats.wood}`; }
-            }
-
-            const tempV = homeTargetPos.clone().project(camera);
-            if (tempV.z <= 1 && instructions.style.display === 'none') {
-                const x = (tempV.x *  .5 + .5) * window.innerWidth; const y = (tempV.y * -.5 + .5) * window.innerHeight;
-                if(x >= 0 && x <= window.innerWidth && y >= 0 && y <= window.innerHeight) {
-                    document.getElementById('home-marker').style.display = 'block';
-                    document.getElementById('home-marker').style.left = `${x}px`; document.getElementById('home-marker').style.top = `${y}px`;
-                    document.getElementById('home-marker').innerText = `🏠 ДОМ [${Math.round(distToCampfire)}м]`;
-                } else { document.getElementById('home-marker').style.display = 'none'; }
-            } else { document.getElementById('home-marker').style.display = 'none'; }
-
-            document.getElementById('warmth-bar').style.width = stats.warmth + '%';
-            document.getElementById('health-bar').style.width = stats.health + '%';
-            document.getElementById('fire-bar').style.width = (stats.campfireTime / 300 * 100) + '%';
-
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+    <!-- Init Lucide Icons -->
+    <script>
+        lucide.createIcons();
     </script>
 </body>
 </html>
